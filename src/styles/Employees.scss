@@ -1,0 +1,637 @@
+/* =========================================
+   EMPLOYEES PAGE
+========================================= */
+
+.employees-page {
+  padding: 28px 32px 40px;
+
+  color: #111827;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   PAGE TOPBAR
+========================================= */
+
+.page-topbar {
+  min-height: 78px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 32px;
+
+  background: #ffffff;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  box-sizing: border-box;
+}
+
+
+.page-topbar h1 {
+  margin: 0;
+
+  font-size: 21px;
+  font-weight: 700;
+
+  color: #111827;
+}
+
+
+.page-topbar p {
+  margin: 4px 0 0;
+
+  font-size: 12px;
+
+  color: #64748b;
+}
+
+
+/* =========================================
+   EMPLOYEE HEADER
+========================================= */
+
+.employees-header {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-bottom: 18px;
+}
+
+
+.employees-header h2 {
+  margin: 0;
+
+  font-size: 21px;
+  font-weight: 700;
+
+  color: #111827;
+}
+
+
+.employees-header p {
+  margin: 5px 0 0;
+
+  color: #64748b;
+
+  font-size: 13px;
+}
+
+
+/* =========================================
+   ADD EMPLOYEE
+========================================= */
+
+.add-employee-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 11px 16px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #5146e5;
+
+  color: #ffffff;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+
+.add-employee-button:hover {
+  background: #4338ca;
+}
+
+
+/* =========================================
+   SEARCH
+========================================= */
+
+.employee-search {
+  width: 100%;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  margin-bottom: 18px;
+
+  padding: 0 15px;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 10px;
+
+  box-sizing: border-box;
+}
+
+
+.employee-search svg {
+  flex-shrink: 0;
+
+  color: #64748b;
+}
+
+
+.employee-search input {
+  width: 100%;
+
+  border: none;
+  outline: none;
+
+  background: transparent;
+
+  color: #111827;
+
+  font-size: 13px;
+}
+
+
+.employee-search input::placeholder {
+  color: #94a3b8;
+}
+
+
+/* =========================================
+   TABLE
+========================================= */
+
+.employee-table {
+  width: 100%;
+
+  overflow: hidden;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 12px;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   TABLE HEADER
+========================================= */
+
+.employee-table-header,
+.employee-card {
+
+  display: grid;
+
+  grid-template-columns:
+    1.5fr
+    1fr
+    1.3fr
+    0.8fr
+    0.55fr;
+
+  align-items: center;
+
+  column-gap: 20px;
+
+  padding: 0 22px;
+
+  box-sizing: border-box;
+}
+
+
+.employee-table-header {
+
+  min-height: 52px;
+
+  background: #ffffff;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  color: #475569;
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+
+.employee-card {
+
+  min-height: 62px;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  background: #ffffff;
+
+  color: #1e293b;
+
+  font-size: 13px;
+}
+
+
+.employee-card:last-child {
+  border-bottom: none;
+}
+
+
+/* =========================================
+   IMPORTANT - NAME VISIBILITY
+========================================= */
+
+.employee-card-name {
+  display: block;
+
+  min-width: 0;
+
+  color: #111827 !important;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  overflow: visible;
+
+  text-overflow: clip;
+}
+
+
+.employee-card-department {
+  color: #475569 !important;
+
+  white-space: nowrap;
+}
+
+
+.employee-card-designation {
+  color: #475569 !important;
+
+  white-space: nowrap;
+}
+
+
+.employee-card-status {
+  display: flex;
+  align-items: center;
+}
+
+
+.employee-card-action {
+  display: flex;
+  align-items: center;
+}
+
+
+.employee-card-action button {
+  padding: 7px 13px;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  color: #1e3a5f;
+
+  font-size: 12px;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+
+.employee-card-action button:hover {
+  background: #f1f5f9;
+
+  border-color: #cbd5e1;
+}
+
+
+/* =========================================
+   STATUS BADGE
+========================================= */
+
+.status-badge {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: fit-content;
+
+  padding: 5px 11px;
+
+  border-radius: 999px;
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+
+.status-badge.active {
+  background: #dcfce7;
+
+  color: #15803d;
+}
+
+
+.status-badge.inactive {
+  background: #f1f5f9;
+
+  color: #64748b;
+}
+
+
+.status-badge.pending {
+  background: #f1f5f9;
+
+  color: #475569;
+}
+
+
+.status-badge.in-progress {
+  background: #fef3c7;
+
+  color: #b45309;
+}
+
+
+.status-badge.completed {
+  background: #dcfce7;
+
+  color: #15803d;
+}
+
+
+/* =========================================
+   EMPTY
+========================================= */
+
+.employee-empty {
+  padding: 50px;
+
+  background: #ffffff;
+
+  text-align: center;
+
+  color: #64748b;
+
+  border-radius: 12px;
+}
+
+
+/* =========================================
+   EMPLOYEE FORM
+========================================= */
+
+.employee-form-page {
+  padding: 28px 32px 50px;
+
+  box-sizing: border-box;
+}
+
+
+.employee-form-container {
+  max-width: 1000px;
+
+  margin: 0 auto;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 14px;
+
+  padding: 28px;
+
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.04);
+}
+
+
+.employee-form-header {
+  margin-bottom: 25px;
+}
+
+
+.employee-form-header h1 {
+  margin: 0;
+
+  font-size: 25px;
+
+  color: #111827;
+}
+
+
+.employee-form-header p {
+  margin: 6px 0 0;
+
+  color: #64748b;
+
+  font-size: 13px;
+}
+
+
+/* =========================================
+   FORM GRID
+========================================= */
+
+.employee-form-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 20px;
+}
+
+
+.form-group {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 7px;
+}
+
+
+.form-group label {
+  color: #334155;
+
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+
+.form-group input,
+.form-group select {
+  width: 100%;
+
+  height: 43px;
+
+  padding: 0 12px;
+
+  border: 1px solid #dbe1ea;
+
+  border-radius: 8px;
+
+  outline: none;
+
+  background: #ffffff;
+
+  color: #111827;
+
+  font-size: 13px;
+
+  box-sizing: border-box;
+
+  transition: 0.2s ease;
+}
+
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #5146e5;
+
+  box-shadow:
+    0 0 0 3px rgba(81, 70, 229, 0.1);
+}
+
+
+.form-error {
+  color: #dc2626;
+
+  font-size: 11px;
+}
+
+
+/* =========================================
+   FORM ACTIONS
+========================================= */
+
+.employee-form-actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  margin-top: 28px;
+
+  padding-top: 20px;
+
+  border-top: 1px solid #e5e7eb;
+}
+
+
+.cancel-button,
+.save-button {
+  min-width: 100px;
+
+  padding: 10px 18px;
+
+  border-radius: 8px;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+
+.cancel-button {
+  border: 1px solid #dbe1ea;
+
+  background: #ffffff;
+
+  color: #475569;
+}
+
+
+.cancel-button:hover {
+  background: #f8fafc;
+}
+
+
+.save-button {
+  border: none;
+
+  background: #5146e5;
+
+  color: #ffffff;
+}
+
+
+.save-button:hover {
+  background: #4338ca;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+
+  .employee-table {
+    overflow-x: auto;
+  }
+
+  .employee-table-header,
+  .employee-card {
+    min-width: 850px;
+  }
+
+  .employee-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .employees-page,
+  .employee-form-page {
+    padding: 20px 16px;
+  }
+
+  .page-topbar {
+    padding: 0 16px;
+  }
+
+  .employees-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .add-employee-button {
+    width: 100%;
+  }
+
+}

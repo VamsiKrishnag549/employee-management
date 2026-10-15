@@ -1,0 +1,18 @@
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin input-focus {
+  border-color: #5146e5;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(81, 70, 229, 0.1);
+}
+
+@mixin button-base {
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
