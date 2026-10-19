@@ -1,5 +1,5 @@
 
-import React, { useEffect, useMemo, useRef ,useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { FixedSizeList as List } from "react-window";
 import {
   useMutation,
@@ -55,7 +55,6 @@ const Tasks = () => {
   // State management
   // ------------------------------------------------
 
-  const [statusError, setStatusError] = useState("");
   const [formError, setFormError] = useState("");
   const [updatingStatusId, setUpdatingStatusId] = useState(null);
 
@@ -71,9 +70,8 @@ const Tasks = () => {
   const [editingId, setEditingId] = useState(null);
 
   const [form, setForm] = useState(initialForm);
-  const [isSaving, setIsSaving] = useState(false);
-
   const formRef = useRef(null);
+
   const [pageNumber, setPageNumber] = useState(1);
 
   const pageSize = 10;
@@ -127,7 +125,7 @@ const Tasks = () => {
       pageNumber: 1,
       pageSize: 10,
       search: debouncedEmployeeSearch || undefined,
-      sortBy: "name",
+      sortBy: "lastName",
       sortOrder: "asc",
     }),
     [debouncedEmployeeSearch]
@@ -395,27 +393,26 @@ const Tasks = () => {
   };
 
   const openEditForm = (task) => {
-  setFormError("");
-  setEditingId(task.id ?? task.Id);
+    setFormError("");
+    setEditingId(task.id ?? task.Id);
 
-  setForm({
-    title: task.title || "",
-    description: task.description || "",
-    employeeId: String(task.employeeId ?? task.EmployeeId ?? ""),
-    status: task.status || "Pending",
-    priority: task.priority || "Medium",
-    dueDate: formatDateForInput(task.dueDate ?? task.DueDate),
-  });
-
-  setShowForm(true);
-
-  setTimeout(() => {
-    formRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
+    setForm({
+      title: task.title ?? task.Title ?? "",
+      description: task.description ?? task.Description ?? "",
+      employeeId: String(task.employeeId ?? task.EmployeeId ?? ""),
+      status: task.status ?? task.Status ?? "Pending",
+      priority: task.priority ?? task.Priority ?? "Medium",
+      dueDate: formatDateForInput(task.dueDate ?? task.DueDate),
     });
-  }, 100);
-};
+
+    setShowForm(true);
+    setTimeout(() => {
+      formRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100);
+  };
 
   const closeForm = () => {
     setFormError("");
@@ -429,78 +426,63 @@ const Tasks = () => {
   // Submit task form
   // ------------------------------------------------
 
- 
-const handleSubmit = async (event) => {
-  event.preventDefault();
-  setFormError("");
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setFormError("");
 
-  // Validate required fields
-  if (!form.title?.trim()) {
-    setFormError("Task title is required.");
-    return;
-  }
-
-  if (!form.employeeId) {
-    setFormError("Please select an employee.");
-    return;
-  }
-
-  if (!form.dueDate) {
-    setFormError("Please select a due date.");
-    return;
-  }
-
-  // Backend requires a future due date.
-  // Compare calendar dates to avoid midnight/timezone issues.
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const selectedDate = new Date(`${form.dueDate}T00:00:00`);
-  selectedDate.setHours(0, 0, 0, 0);
-
-  if (selectedDate < today) {
-    window.alert("Due date cannot be in the past.");
-    return;
-  }
-
-  const taskData = {
-    title: form.title.trim(),
-    description: form.description?.trim() || null,
-    employeeId: Number(form.employeeId),
-    status: form.status,
-    priority: form.priority,
-    dueDate: `${form.dueDate}T00:00:00`,
-  };
-
-  try {
-    setIsSaving(true);
-
-    if (editingId) {
-      await taskService.updateTask(editingId, taskData);
-    } else {
-      await taskService.createTask(taskData);
+    if (!form.title.trim() || form.title.trim().length < 3) {
+      setFormError("Task title must contain at least 3 characters.");
+      return;
     }
 
-    setShowForm(false);
-    setEditingId(null);
+    if (!form.employeeId) {
+      setFormError("Please select an employee.");
+      return;
+    }
 
-    // Refresh the task list using your existing query.
-    await queryClient.invalidateQueries({
-      queryKey: ["tasks"],
-    });
-  } catch (err) {
-    window.alert(getApiErrorMessage(err));
-  } finally {
-    setIsSaving(false);
-  }
-};
+    if (!form.dueDate) {
+      setFormError("Please select a due date.");
+      return;
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const selectedDate = new Date(`${form.dueDate}T00:00:00`);
+    selectedDate.setHours(0, 0, 0, 0);
+    if (selectedDate < today) {
+      window.alert("Due date cannot be in the past.");
+      return;
+    }
+
+    if (form.description.length > 500) {
+      setFormError("Description cannot exceed 500 characters.");
+      return;
+    }
+
+    const taskData = {
+      title: form.title.trim(),
+      description: form.description.trim() || null,
+      employeeId: Number(form.employeeId),
+      priority: form.priority,
+      status: form.status,
+      dueDate: `${form.dueDate}T00:00:00`,
+    };
+
+    try {
+      await saveMutation.mutateAsync({
+        id: editingId,
+        data: taskData,
+      });
+    } catch (err) {
+      window.alert(getApiErrorMessage(err));
+    }
+  };
 
   // ------------------------------------------------
   // Handle status changes
   // ------------------------------------------------
 
   const handleStatusChange = async (id, status) => {
-    setStatusError("");
     setUpdatingStatusId(id);
 
     try {
@@ -510,7 +492,6 @@ const handleSubmit = async (event) => {
       });
     } catch (err) {
       window.alert(getApiErrorMessage(err) || "Unable to update task status.");
-
       await tasksQuery.refetch();
     } finally {
       setUpdatingStatusId(null);
@@ -521,32 +502,23 @@ const handleSubmit = async (event) => {
   // Handle task deletion
   // ------------------------------------------------
 
-  
-const handleDelete = async (id) => {
-  if (!canDeleteTasks) return;
+  const handleDelete = async (id) => {
+    if (!canDeleteTasks) return;
 
-  const confirmed = window.confirm(
-    "Are you sure you want to delete this task?"
-  );
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this task?"
+    );
 
-  if (!confirmed) return;
+    if (!confirmed) return;
 
-  try {
-    await deleteMutation.mutateAsync(id);
-  } catch (err) {
-    if (err?.response?.status === 409) {
-      window.alert(
-        err.response?.data?.message ||
-        "Tasks with Pending or In Progress status cannot be deleted."
-      );
-    } else {
-      window.alert(getApiErrorMessage(err));
+    try {
+      await deleteMutation.mutateAsync(id);
+    } catch (err) {
+      window.alert(getApiErrorMessage(err) || "Failed to delete the task.");
+    } finally {
+      deleteMutation.reset();
     }
-  } finally {
-    deleteMutation.reset();
-  }
-};
-
+  };
 
   // ------------------------------------------------
   // Virtualized task row
@@ -752,15 +724,9 @@ const handleDelete = async (id) => {
 
           {/* Error messages */}
 
-          {(error ||
-            statusError ||
-            saveMutation.error) && (
+          {error && (
             <div role="alert" className="error-message">
-              {statusError ||
-                error ||
-                saveMutation.error?.response?.data?.detail ||
-                saveMutation.error?.response?.data?.message ||
-                "The request failed. Please try again."}
+              {error}
 
               <button
                 type="button"
@@ -796,7 +762,14 @@ const handleDelete = async (id) => {
               </div>
 
               <form onSubmit={handleSubmit}>
-                
+                {formError && (
+                  <div className="error-message task-form-error" role="alert" aria-live="polite">
+                    <span>{formError}</span>
+                    <button type="button" onClick={() => setFormError("")} aria-label="Dismiss error">
+                      <X size={16} />
+                    </button>
+                  </div>
+                )}
 
                 <div className="task-form-grid">
 
@@ -917,9 +890,7 @@ const handleDelete = async (id) => {
                       type="date"
                       name="dueDate"
                       value={form.dueDate}
-                      min={new Date().getFullYear() + "-" +
-       String(new Date().getMonth() + 1).padStart(2, "0") + "-" +
-       String(new Date().getDate()).padStart(2, "0")}
+                      min={`${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`}
                       onChange={handleChange}
                       required
                     />
