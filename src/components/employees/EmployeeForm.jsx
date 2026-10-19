@@ -7,7 +7,7 @@ import { employeeKeys } from "../../hooks/useEmployeesQuery";
 import employeeService from "../../services/employeeService";
 import Sidebar from "../common/Sidebar";
 import Loader from "../common/Loader";
-
+import departments from "../../constants/departments";
 import "../../styles/Employees.scss";
 
 const initialForm = {
@@ -204,17 +204,35 @@ const EmployeeForm = () => {
       ]);
 
       navigate("/employees", { replace: true });
+    
     } catch (error) {
-      const serverMessage = error?.response?.data?.detail || error?.response?.data?.message || error?.response?.data?.title;
-      const isDuplicateEmail = error?.response?.status === 409 && /email|duplicate|already exists|unique/i.test(serverMessage || "");
-      if (isDuplicateEmail) {
-        setErrors((previous) => ({ ...previous, email: "This email is already in use. Please enter a different email address." }));
-      } else {
-        setApiError(serverMessage || error.message || `Unable to ${isEdit ? "update" : "create"} employee.`);
-      }
-    } finally {
-      setSaving(false);
-    }
+          const data = error?.response?.data;
+
+          if (data?.errors) {
+            const messages = Object.entries(data.errors)
+              .flatMap(([field, errors]) => {
+                const fieldName = field.replace(
+                  /([a-z])([A-Z])/g,
+                  "$1 $2"
+                );
+
+                return (Array.isArray(errors) ? errors : [errors])
+                  .map((message) => `${fieldName}: ${message}`);
+              });
+
+            window.alert(messages.join("\n"));
+          } else {
+            window.alert(
+              data?.detail ||
+              data?.message ||
+              data?.title ||
+              "Unable to save employee. Please try again."
+            );
+          }
+      } finally {
+          setSaving(false);
+        }
+
   };
 
   const handleCancel = () => {
@@ -318,7 +336,7 @@ const EmployeeForm = () => {
                     {errors.password && (
                       <small className="form-error">{errors.password}</small>
                     )}
-                    <small className="form-hint">The employee will sign in with this email and password. The backend stores only a password hash.</small>
+                    <small className="form-hint">Password must be 8 characters.</small>
                   </div>
                 )}
 
@@ -336,19 +354,33 @@ const EmployeeForm = () => {
                   )}
                 </div>
 
+                
                 <div className="form-group">
-                  <label>Department</label>
-                  <input
-                    type="text"
+                  <label htmlFor="department">Department</label>
+
+                  <select
+                    id="department"
                     name="department"
                     value={form.department}
                     onChange={handleChange}
-                    placeholder="Enter department"
-                  />
+                    required
+                  >
+                    <option value="">Select department</option>
+
+                    {departments.map((department) => (
+                      <option key={department} value={department}>
+                        {department}
+                      </option>
+                    ))}
+                  </select>
+
                   {errors.department && (
-                    <small className="form-error">{errors.department}</small>
+                    <small className="form-error">
+                      {errors.department}
+                    </small>
                   )}
                 </div>
+
 
                 <div className="form-group">
                   <label>Designation</label>

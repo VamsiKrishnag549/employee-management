@@ -32,8 +32,8 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const summaryQuery = useQuery({ queryKey: ["dashboard", "summary"], queryFn: dashboardService.getDashboardSummary });
-  const employeesQuery = useQuery({ queryKey: employeeKeys.list({ page: 1, pageSize: 4, sortBy: "createdAt", sortDir: "desc" }), queryFn: () => employeeService.getEmployees({ page: 1, pageSize: 4, sortBy: "createdAt", sortDir: "desc" }) });
-  const tasksQuery = useQuery({ queryKey: taskKeys.list({ page: 1, pageSize: 4, sortBy: "createdAt", sortDir: "desc" }), queryFn: () => taskService.getTasks({ page: 1, pageSize: 4, sortBy: "createdAt", sortDir: "desc" }) });
+  const employeesQuery = useQuery({ queryKey: employeeKeys.list({ pageNumber: 1, pageSize: 10, sortBy: "name", sortOrder: "asc" }), queryFn: () => employeeService.getEmployees({ pageNumber: 1, pageSize: 10, sortBy: "name", sortOrder: "asc" }) });
+  const tasksQuery = useQuery({ queryKey: taskKeys.list({ pageNumber: 1, pageSize: 10, sortBy: "name", sortOrder: "asc" }), queryFn: () => taskService.getTasks({ pageNumber: 1, pageSize: 10, sortBy: "createdAt", sortOrder: "desc" }) });
   const isLoading = summaryQuery.isLoading || employeesQuery.isLoading || tasksQuery.isLoading;
   const error = summaryQuery.error || employeesQuery.error || tasksQuery.error;
   const summary = summaryQuery.data || {};

@@ -119,7 +119,8 @@ const Login = () => {
             type="email"
             value={formData.email}
             onChange={handleChange}
-            placeholder="admin@example.com"
+            placeholder="admin@example.com" 
+            
             error={errors.email}
             required
           />
